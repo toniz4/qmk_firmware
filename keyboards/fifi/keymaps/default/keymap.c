@@ -55,7 +55,7 @@ enum custom_keycodes {
 #define HR_INDL KC_LSFT
 
 #define HR_PINR KC_RGUI
-#define HR_RINR KC_RALT
+#define HR_RINR KC_LALT
 #define HR_MIDR KC_RCTL
 #define HR_INDR KC_RSFT
 
@@ -156,8 +156,8 @@ oled_render_mod_state(void)
 	oled_write_P(PSTR(" "), false);
 	oled_write_P(PSTR("G"), (mod_state & MOD_MASK_GUI) != 0);
 	oled_write_P(PSTR("A"), (mod_state & MOD_MASK_ALT) != 0);
-	oled_write_P(PSTR("S"), (mod_state & MOD_MASK_SHIFT) != 0);
 	oled_write_P(PSTR("C"), (mod_state & MOD_MASK_CTRL) != 0);
+	oled_write_P(PSTR("S"), (mod_state & MOD_MASK_SHIFT) != 0);
 	if (host_keyboard_leds()) {
 		oled_write_P(PSTR(" "), false);
 		oled_write_P(PSTR("CAPS"), true);
