@@ -54,7 +54,7 @@ enum custom_keycodes {
 #define HR_INDL KC_LSFT
 
 #define HR_PINR KC_RGUI
-#define HR_RINR KC_LALT
+#define HR_RINR KC_RALT
 #define HR_MIDR KC_RCTL
 #define HR_INDR KC_RSFT
 
@@ -66,7 +66,7 @@ enum custom_keycodes {
 
 #define HR_N MT(MOD_RSFT, BR_N)
 #define HR_E MT(MOD_RCTL, BR_E)
-#define HR_I MT(MOD_RALT, BR_I)
+#define HR_I MT(MOD_LALT, BR_I)
 #define HR_O MT(MOD_RGUI, BR_O)
 #define HR_H LT(_ACT, BR_H)
 
