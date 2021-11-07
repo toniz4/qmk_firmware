@@ -49,6 +49,42 @@ enum custom_keycodes {
 	BR_UACT,
 };
 
+#define ADD_ACUT(KC) \
+	tmp_mods = get_mods(); \
+	if (tmp_mods & MOD_MASK_SHIFT) { \
+		unregister_mods(MOD_MASK_SHIFT); \
+		tap_code(BR_ACUT); \
+		set_mods(tmp_mods); \
+		tap_code(KC); \
+	} else { \
+		tap_code(BR_ACUT); \
+		tap_code(KC); \
+	} \
+
+#define ADD_TILD(KC) \
+	tmp_mods = get_mods(); \
+	if (tmp_mods & MOD_MASK_SHIFT) { \
+		unregister_mods(MOD_MASK_SHIFT); \
+		tap_code(BR_TILD); \
+		set_mods(tmp_mods); \
+		tap_code(KC); \
+	} else { \
+		tap_code(BR_TILD); \
+		tap_code(KC); \
+	} \
+
+#define ADD_CIRC(KC) \
+	tmp_mods = get_mods(); \
+	if (tmp_mods & MOD_MASK_SHIFT) { \
+		tap_code(BR_TILD); \
+		tap_code(KC); \
+	} else { \
+		register_code(KC_LSFT); \
+		tap_code(BR_TILD); \
+		unregister_mods(MOD_MASK_SHIFT); \
+		tap_code(KC); \
+	} \
+
 #define HR_PINL KC_LGUI
 #define HR_RINL KC_LALT
 #define HR_MIDL KC_LCTL
@@ -235,30 +271,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		break;
 	case BR_AACT: 
 		if (record->event.pressed) {
-			tmp_mods = get_mods();
-			if (tmp_mods & MOD_MASK_SHIFT) {
-				unregister_mods(MOD_MASK_SHIFT);
-				tap_code(BR_ACUT);
-				set_mods(tmp_mods);
-				tap_code(BR_A);
-			} else {
-				tap_code(BR_ACUT);
-				tap_code(BR_A);
-			}
+			ADD_ACUT(BR_A)
 		} 		
 		break;
 	case BR_ATIL: 
 		if (record->event.pressed) {
-			tmp_mods = get_mods();
-			if (tmp_mods & MOD_MASK_SHIFT) {
-				unregister_mods(MOD_MASK_SHIFT);
-				tap_code(BR_TILD);
-				set_mods(tmp_mods);
-				tap_code(BR_A);
-			} else {
-				tap_code(BR_TILD);
-				tap_code(BR_A);
-			}
+			ADD_TILD(BR_A)
 		} 		
 		break;
 	case BR_AGRV: 
@@ -277,114 +295,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		break;
 	case BR_ACIR: 
 		if (record->event.pressed) {
-			tmp_mods = get_mods();
-			if (tmp_mods & MOD_MASK_SHIFT) {
-				tap_code(BR_TILD);
-				tap_code(BR_A);
-			} else {
-				register_code(KC_LSFT);
-				tap_code(BR_TILD);
-				unregister_mods(MOD_MASK_SHIFT);
-				tap_code(BR_A);
-			}
+			ADD_CIRC(BR_A)
 		}
 		break;
 	case BR_EACT: 
 		if (record->event.pressed) {
-			tmp_mods = get_mods();
-			if (tmp_mods & MOD_MASK_SHIFT) {
-				unregister_mods(MOD_MASK_SHIFT);
-				tap_code(BR_ACUT);
-				set_mods(tmp_mods);
-				tap_code(BR_E);
-			} else {
-				tap_code(BR_ACUT);
-				tap_code(BR_E);
-			}
+			ADD_ACUT(BR_E)
 		} 		
 	break;
 	case BR_ECIR: 
 		if (record->event.pressed) {
-			tmp_mods = get_mods();
-			if (tmp_mods & MOD_MASK_SHIFT) {
-				tap_code(BR_TILD);
-				tap_code(BR_E);
-			} else {
-				register_code(KC_LSFT);
-				tap_code(BR_TILD);
-				unregister_mods(MOD_MASK_SHIFT);
-				tap_code(BR_E);
-			}
+			ADD_CIRC(BR_E)
 		}
 		break;
 	case BR_IACT: 
 		if (record->event.pressed) {
-			tmp_mods = get_mods();
-			if (tmp_mods & MOD_MASK_SHIFT) {
-				unregister_mods(MOD_MASK_SHIFT);
-				tap_code(BR_ACUT);
-				set_mods(tmp_mods);
-				tap_code(BR_I);
-			} else {
-				tap_code(BR_ACUT);
-				tap_code(BR_I);
-			}
+			ADD_ACUT(BR_I)
 		} 		
 		break;
 	case BR_OACT: 
 		if (record->event.pressed) {
-			tmp_mods = get_mods();
-			if (tmp_mods & MOD_MASK_SHIFT) {
-				unregister_mods(MOD_MASK_SHIFT);
-				tap_code(BR_ACUT);
-				set_mods(tmp_mods);
-				tap_code(BR_O);
-			} else {
-				tap_code(BR_ACUT);
-				tap_code(BR_O);
-			}
+			ADD_ACUT(BR_O)
 		} 		
 		break;
 	case BR_OCIR: 
 		if (record->event.pressed) {
-			tmp_mods = get_mods();
-			if (tmp_mods & MOD_MASK_SHIFT) {
-				tap_code(BR_TILD);
-				tap_code(BR_O);
-			} else {
-				register_code(KC_LSFT);
-				tap_code(BR_TILD);
-				unregister_mods(MOD_MASK_SHIFT);
-				tap_code(BR_O);
-			}
+			ADD_CIRC(BR_O)
 		}
 		break;
 	case BR_OTIL: 
 		if (record->event.pressed) {
-			tmp_mods = get_mods();
-			if (tmp_mods & MOD_MASK_SHIFT) {
-				unregister_mods(MOD_MASK_SHIFT);
-				tap_code(BR_TILD);
-				set_mods(tmp_mods);
-				tap_code(BR_O);
-			} else {
-				tap_code(BR_TILD);
-				tap_code(BR_O);
-			}
+			ADD_TILD(BR_O)
 		} 		
 		break;
 	case BR_UACT: 
 		if (record->event.pressed) {
-			tmp_mods = get_mods();
-			if (tmp_mods & MOD_MASK_SHIFT) {
-				unregister_mods(MOD_MASK_SHIFT);
-				tap_code(BR_ACUT);
-				set_mods(tmp_mods);
-				tap_code(BR_U);
-			} else {
-				tap_code(BR_ACUT);
-				tap_code(BR_U);
-			}
+			ADD_ACUT(BR_U)
 		} 		
 		break;
 	}

@@ -2,6 +2,9 @@
 
 #define OLED_FONT_H "keyboards/fifi/lib/glcdfont.c"
 
+#undef DEBOUNCE
+#define DEBOUNCE 1
+
 // default but used in macros
 #undef TAPPING_TERM
 #define TAPPING_TERM 200
