@@ -22,7 +22,9 @@
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
 	_BASE,
+	_MED,
 	_NAV,
+	_MOU,
 	_SYM,
 	_NUM,
 	_FUN,
@@ -104,9 +106,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 			                  KC_DEL,  KC_BSPC, KC_TAB,  XXXXXXX, XXXXXXX, XXXXXXX
 	),
 	[_NAV] = LAYOUT_split_3x5_3(
-			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX, XXXXXXX,
-			HR_PINL, HR_INDL, HR_MIDL, HR_INDL, XXXXXXX, XXXXXXX, KC_PGDN, KC_PGUP, XXXXXXX, XXXXXXX,
-			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_UP,   KC_LEFT, XXXXXXX, XXXXXXX, XXXXXXX,
+			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_DOWN, KC_RGHT, KC_HOME, KC_END,  KC_AGIN,
+			HR_PINL, HR_INDL, HR_MIDL, HR_INDL, XXXXXXX, KC_INS,  KC_PGDN, KC_PGUP, KC_PSTE, KC_CAPS,
+			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_UP,   KC_LEFT, KC_COPY, KC_CUT,  KC_UNDO,
 			                  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 	),
 	[_ACT] = LAYOUT_split_3x5_3(
@@ -135,7 +137,9 @@ void oled_render_layer_state(void) {
 	oled_write_P(PSTR("Layer\n"), false);
 
 	oled_write_P(PSTR(" Def "), layer_state == 0);
+	oled_write_P(PSTR(" Med "), CHECK_BIT(layer_state, _MED) != 0);
 	oled_write_P(PSTR(" Nav "), CHECK_BIT(layer_state, _NAV) != 0);
+	oled_write_P(PSTR(" Mos "), CHECK_BIT(layer_state, _MOU) != 0);
 	oled_write_P(PSTR(" Sym "), CHECK_BIT(layer_state, _SYM) != 0);
 	oled_write_P(PSTR(" Num "), CHECK_BIT(layer_state, _NUM) != 0);
 	oled_write_P(PSTR(" Fun "), CHECK_BIT(layer_state, _FUN) != 0);
@@ -154,21 +158,11 @@ oled_render_mod_state(void)
 	oled_write_P(PSTR("A"), (mod_state & MOD_MASK_ALT) != 0);
 	oled_write_P(PSTR("S"), (mod_state & MOD_MASK_SHIFT) != 0);
 	oled_write_P(PSTR("C"), (mod_state & MOD_MASK_CTRL) != 0);
-}
-
-void render_bootmagic_status(bool status) {
-    /* Show Ctrl-Gui Swap options */
-    static const char PROGMEM logo[][2][3] = {
-        {{0x97, 0x98, 0}, {0xb7, 0xb8, 0}},
-        {{0x95, 0x96, 0}, {0xb5, 0xb6, 0}},
-    };
-    if (status) {
-        oled_write_ln_P(logo[0][0], false);
-        oled_write_ln_P(logo[0][1], false);
-    } else {
-        oled_write_ln_P(logo[1][0], false);
-        oled_write_ln_P(logo[1][1], false);
-    }
+	if (host_keyboard_leds()) {
+		oled_write_P(PSTR(" "), false);
+		oled_write_P(PSTR("CAPS"), true);
+	} else
+		oled_write_ln_P(PSTR(""), false);
 }
 
 static void oled_render_logo(void) {
