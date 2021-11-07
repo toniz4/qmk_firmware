@@ -45,7 +45,6 @@ enum custom_keycodes {
 	BR_OTIL,
 	BR_OCIR,
 	BR_UACT,
-	QMKURL
 };
 
 #define HR_PINL KC_LGUI
