@@ -16,16 +16,13 @@
 #include QMK_KEYBOARD_H
 
 #include "sendstring_br_abnt2.h"
-#include "caps_word.h"
 
 #define CHECK_BIT(var, pos) ((var) & (1 << (pos)))
 
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
 	_BASE,
-	_MED,
 	_NAV,
-	_MOU,
 	_SYM,
 	_NUM,
 	_FUN,
@@ -48,6 +45,7 @@ enum custom_keycodes {
 	BR_OTIL,
 	BR_OCIR,
 	BR_UACT,
+	QMKURL
 };
 
 #define HR_PINL KC_LGUI
@@ -68,13 +66,13 @@ enum custom_keycodes {
 
 #define HR_N MT(MOD_RSFT, BR_N)
 #define HR_E MT(MOD_RCTL, BR_E)
-#define HR_I MT(MOD_LALT, BR_I)
+#define HR_I MT(MOD_RALT, BR_I)
 #define HR_O MT(MOD_RGUI, BR_O)
 #define HR_H LT(_ACT, BR_H)
 
-#define HR_DEL  LT(_MED, KC_DEL)
+#define HR_DEL  LT(_NAV, KC_DEL)
 #define HR_BSPC LT(_NAV, KC_BSPC)
-#define HR_TAB  LT(_MOU, KC_TAB)
+#define HR_TAB  LT(_NAV, KC_TAB)
 
 #define HR_ENT LT(_SYM, KC_ENT)
 #define HR_SPC LT(_NUM, KC_SPC)
@@ -86,18 +84,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 			BR_Q,    BR_W,    BR_F,    BR_P,    BR_B,    BR_J,    BR_L,   BR_U,    BR_Y,    BR_QUOT,
 			HR_A,    HR_R,    HR_S,    HR_T,    BR_G,    BR_M,    HR_N,   HR_E,    HR_I,    HR_O,
 			BR_Z,    BR_X,    BR_C,    HR_D,    BR_V,    BR_K,    HR_H,   BR_COMM, BR_DOT,  BR_SLSH,
-			                  HR_DEL,  HR_BSPC,  HR_TAB,  HR_ENT,  HR_SPC, HR_ESC
+			                  HR_DEL,  HR_BSPC, HR_TAB,  HR_ENT,  HR_SPC, HR_ESC
 	),
 	[_NUM] = LAYOUT_split_3x5_3(
-			BR_ASTR, BR_7,    BR_8,    BR_9,    BR_COMM, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+			BR_ASTR, BR_7,    BR_8,    BR_9,    BR_B,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
 			BR_SCLN, BR_4,    BR_5,    BR_6,    BR_EQL,  XXXXXXX, HR_INDR, HR_MIDR, HR_RINR, HR_PINR,
 			ND_GRV,  BR_1,    BR_2,    BR_3,    BR_BSLS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
 			                  BR_DOT,  BR_0,    BR_MINS, XXXXXXX, XXXXXXX, XXXXXXX
 	),
 	[_SYM] = LAYOUT_split_3x5_3(
-			BR_EXLM, BR_AMPR, BR_LBRC, BR_RBRC, ND_CIRC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+			BR_EXLM, BR_AMPR, BR_LCBR, BR_RCBR, ND_CIRC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
 			BR_COLN, BR_AT,   BR_LPRN, BR_RPRN, BR_PLUS, XXXXXXX, HR_INDR, HR_MIDR, HR_RINR, HR_PINR,
-			ND_TILD, BR_PERC, BR_LCBR, BR_RCBR, BR_PIPE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+			ND_TILD, BR_PERC, BR_LBRC, BR_RBRC, BR_PIPE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
 			                  BR_HASH, BR_DLR,  BR_UNDS, XXXXXXX, XXXXXXX, XXXXXXX
 	),
 	[_FUN] = LAYOUT_split_3x5_3(
@@ -106,22 +104,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 			KC_F10, KC_F1,    KC_F2,   KC_F3,   KC_BSLS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
 			                  KC_DEL,  KC_BSPC, KC_TAB,  XXXXXXX, XXXXXXX, XXXXXXX
 	),
-	[_MED] = LAYOUT_split_3x5_3(
-			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MPRV, KC_MNXT, XXXXXXX, XXXXXXX,
-			HR_PINL, HR_INDL, HR_MIDL, HR_INDL, XXXXXXX, XXXXXXX, KC_VOLD, KC_VOLU, XXXXXXX, XXXXXXX,
-			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_BRID, KC_BRIU, XXXXXXX, XXXXXXX,
-			                  XXXXXXX, XXXXXXX, XXXXXXX, KC_MSTP, KC_MPLY, KC_MUTE
-	),
 	[_NAV] = LAYOUT_split_3x5_3(
-			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_DOWN, KC_RGHT, KC_HOME, KC_END,  KC_AGIN,
-			HR_PINL, HR_INDL, HR_MIDL, HR_INDL, XXXXXXX, KC_INS,  KC_PGDN, KC_PGUP, KC_PSTE, KC_CAPS,
-			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_UP,   KC_LEFT, KC_COPY, KC_CUT,  KC_UNDO,
-			                  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_PSCR, XXXXXXX
-	),
-	[_MOU] = LAYOUT_split_3x5_3(
-			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_DOWN, KC_RGHT, KC_HOME, KC_END,  KC_AGIN,
-			HR_PINL, HR_INDL, HR_MIDL, HR_INDL, XXXXXXX, KC_INS,  KC_PGDN, KC_PGUP, KC_PSTE, KC_CAPS,
-			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_UP,   KC_LEFT, KC_COPY, KC_CUT,  KC_UNDO,
+			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX, XXXXXXX,
+			HR_PINL, HR_INDL, HR_MIDL, HR_INDL, XXXXXXX, XXXXXXX, KC_PGDN, KC_PGUP, XXXXXXX, XXXXXXX,
+			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_UP,   KC_LEFT, XXXXXXX, XXXXXXX, XXXXXXX,
 			                  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 	),
 	[_ACT] = LAYOUT_split_3x5_3(
@@ -150,9 +136,7 @@ void oled_render_layer_state(void) {
 	oled_write_P(PSTR("Layer\n"), false);
 
 	oled_write_P(PSTR(" Def "), layer_state == 0);
-	oled_write_P(PSTR(" Med "), CHECK_BIT(layer_state, _MED) != 0);
 	oled_write_P(PSTR(" Nav "), CHECK_BIT(layer_state, _NAV) != 0);
-	oled_write_P(PSTR(" Mos "), CHECK_BIT(layer_state, _MOU) != 0);
 	oled_write_P(PSTR(" Sym "), CHECK_BIT(layer_state, _SYM) != 0);
 	oled_write_P(PSTR(" Num "), CHECK_BIT(layer_state, _NUM) != 0);
 	oled_write_P(PSTR(" Fun "), CHECK_BIT(layer_state, _FUN) != 0);
@@ -169,13 +153,23 @@ oled_render_mod_state(void)
 	oled_write_P(PSTR(" "), false);
 	oled_write_P(PSTR("G"), (mod_state & MOD_MASK_GUI) != 0);
 	oled_write_P(PSTR("A"), (mod_state & MOD_MASK_ALT) != 0);
-	oled_write_P(PSTR("C"), (mod_state & MOD_MASK_CTRL) != 0);
 	oled_write_P(PSTR("S"), (mod_state & MOD_MASK_SHIFT) != 0);
-	if (host_keyboard_leds()) {
-		oled_write_P(PSTR(" "), false);
-		oled_write_P(PSTR("CAPS"), true);
-	} else
-		oled_write_ln_P(PSTR(""), false);
+	oled_write_P(PSTR("C"), (mod_state & MOD_MASK_CTRL) != 0);
+}
+
+void render_bootmagic_status(bool status) {
+    /* Show Ctrl-Gui Swap options */
+    static const char PROGMEM logo[][2][3] = {
+        {{0x97, 0x98, 0}, {0xb7, 0xb8, 0}},
+        {{0x95, 0x96, 0}, {0xb5, 0xb6, 0}},
+    };
+    if (status) {
+        oled_write_ln_P(logo[0][0], false);
+        oled_write_ln_P(logo[0][1], false);
+    } else {
+        oled_write_ln_P(logo[1][0], false);
+        oled_write_ln_P(logo[1][1], false);
+    }
 }
 
 static void oled_render_logo(void) {
@@ -227,63 +221,9 @@ void oled_task_user(void) {
 }
 #endif // OLED_ENABLE
 
-void
-add_acute(uint16_t keycode)
-{
-	uint8_t tmp_mods;
-
-	tmp_mods = get_mods(); 
-	if (tmp_mods & MOD_MASK_SHIFT) { 
-		unregister_mods(MOD_MASK_SHIFT); 
-		tap_code(BR_ACUT); 
-		set_mods(tmp_mods); 
-		tap_code(keycode); 
-	} else { 
-		tap_code(BR_ACUT); 
-		tap_code(keycode); 
-	} 
-}
-
-void
-add_tilda(uint16_t keycode)
-{
-	uint8_t tmp_mods;
-
-	tmp_mods = get_mods(); 
-	if (tmp_mods & MOD_MASK_SHIFT) { 
-		unregister_mods(MOD_MASK_SHIFT); 
-		tap_code(BR_TILD); 
-		set_mods(tmp_mods); 
-		tap_code(keycode); 
-	} else { 
-		tap_code(BR_TILD); 
-		tap_code(keycode); 
-	} 
-}
-
-void
-add_circumflex(uint16_t keycode)
-{
-	uint8_t tmp_mods;
-
-	tmp_mods = get_mods();
-	if (tmp_mods & MOD_MASK_SHIFT) {
-		tap_code(BR_TILD);
-		tap_code(keycode);
-	} else {
-		register_code(KC_LSFT);
-		tap_code(BR_TILD);
-		unregister_mods(MOD_MASK_SHIFT);
-		tap_code(keycode);
-	}
-}
-
-	uint8_t tmp_mods;
+uint8_t tmp_mods;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-	if (!process_caps_word(keycode, record))
-		return false;
-
 	switch(keycode) {
 	case ND_TILD: 
 		if (record->event.pressed) {
@@ -302,12 +242,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		break;
 	case BR_AACT: 
 		if (record->event.pressed) {
-			add_acute(BR_A);
+			tmp_mods = get_mods();
+			if (tmp_mods & MOD_MASK_SHIFT) {
+				unregister_mods(MOD_MASK_SHIFT);
+				tap_code(BR_ACUT);
+				set_mods(tmp_mods);
+				tap_code(BR_A);
+			} else {
+				tap_code(BR_ACUT);
+				tap_code(BR_A);
+			}
 		} 		
 		break;
 	case BR_ATIL: 
 		if (record->event.pressed) {
-			add_tilda(BR_A);
+			tmp_mods = get_mods();
+			if (tmp_mods & MOD_MASK_SHIFT) {
+				unregister_mods(MOD_MASK_SHIFT);
+				tap_code(BR_TILD);
+				set_mods(tmp_mods);
+				tap_code(BR_A);
+			} else {
+				tap_code(BR_TILD);
+				tap_code(BR_A);
+			}
 		} 		
 		break;
 	case BR_AGRV: 
@@ -326,42 +284,114 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		break;
 	case BR_ACIR: 
 		if (record->event.pressed) {
-			add_circumflex(BR_A);
+			tmp_mods = get_mods();
+			if (tmp_mods & MOD_MASK_SHIFT) {
+				tap_code(BR_TILD);
+				tap_code(BR_A);
+			} else {
+				register_code(KC_LSFT);
+				tap_code(BR_TILD);
+				unregister_mods(MOD_MASK_SHIFT);
+				tap_code(BR_A);
+			}
 		}
 		break;
 	case BR_EACT: 
 		if (record->event.pressed) {
-			add_acute(BR_E);
+			tmp_mods = get_mods();
+			if (tmp_mods & MOD_MASK_SHIFT) {
+				unregister_mods(MOD_MASK_SHIFT);
+				tap_code(BR_ACUT);
+				set_mods(tmp_mods);
+				tap_code(BR_E);
+			} else {
+				tap_code(BR_ACUT);
+				tap_code(BR_E);
+			}
 		} 		
 	break;
 	case BR_ECIR: 
 		if (record->event.pressed) {
-			add_circumflex(BR_E);
+			tmp_mods = get_mods();
+			if (tmp_mods & MOD_MASK_SHIFT) {
+				tap_code(BR_TILD);
+				tap_code(BR_E);
+			} else {
+				register_code(KC_LSFT);
+				tap_code(BR_TILD);
+				unregister_mods(MOD_MASK_SHIFT);
+				tap_code(BR_E);
+			}
 		}
 		break;
 	case BR_IACT: 
 		if (record->event.pressed) {
-			add_acute(BR_I);
+			tmp_mods = get_mods();
+			if (tmp_mods & MOD_MASK_SHIFT) {
+				unregister_mods(MOD_MASK_SHIFT);
+				tap_code(BR_ACUT);
+				set_mods(tmp_mods);
+				tap_code(BR_I);
+			} else {
+				tap_code(BR_ACUT);
+				tap_code(BR_I);
+			}
 		} 		
 		break;
 	case BR_OACT: 
 		if (record->event.pressed) {
-			add_acute(BR_O);
+			tmp_mods = get_mods();
+			if (tmp_mods & MOD_MASK_SHIFT) {
+				unregister_mods(MOD_MASK_SHIFT);
+				tap_code(BR_ACUT);
+				set_mods(tmp_mods);
+				tap_code(BR_O);
+			} else {
+				tap_code(BR_ACUT);
+				tap_code(BR_O);
+			}
 		} 		
 		break;
 	case BR_OCIR: 
 		if (record->event.pressed) {
-			add_circumflex(BR_O);
+			tmp_mods = get_mods();
+			if (tmp_mods & MOD_MASK_SHIFT) {
+				tap_code(BR_TILD);
+				tap_code(BR_O);
+			} else {
+				register_code(KC_LSFT);
+				tap_code(BR_TILD);
+				unregister_mods(MOD_MASK_SHIFT);
+				tap_code(BR_O);
+			}
 		}
 		break;
 	case BR_OTIL: 
 		if (record->event.pressed) {
-			add_tilda(BR_O);
+			tmp_mods = get_mods();
+			if (tmp_mods & MOD_MASK_SHIFT) {
+				unregister_mods(MOD_MASK_SHIFT);
+				tap_code(BR_TILD);
+				set_mods(tmp_mods);
+				tap_code(BR_O);
+			} else {
+				tap_code(BR_TILD);
+				tap_code(BR_O);
+			}
 		} 		
 		break;
 	case BR_UACT: 
 		if (record->event.pressed) {
-			add_acute(BR_U);
+			tmp_mods = get_mods();
+			if (tmp_mods & MOD_MASK_SHIFT) {
+				unregister_mods(MOD_MASK_SHIFT);
+				tap_code(BR_ACUT);
+				set_mods(tmp_mods);
+				tap_code(BR_U);
+			} else {
+				tap_code(BR_ACUT);
+				tap_code(BR_U);
+			}
 		} 		
 		break;
 	}
