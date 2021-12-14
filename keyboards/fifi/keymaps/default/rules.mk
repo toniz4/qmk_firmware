@@ -1,6 +1,5 @@
-SRC += caps_word.c
+# SRC += caps_word.c
 
-OLED_ENABLE = yes
-OLED_DRIVER = SSD1306
+COMBO_ENABLE = yes
 
 LTO_ENABLE = yes
