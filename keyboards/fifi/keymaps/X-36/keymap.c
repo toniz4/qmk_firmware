@@ -32,7 +32,6 @@ enum layer_names {
 	_FUN,
 	_ACT,
 	_MIS,
-	_QWT,
 };
 
 // Defines the keycodes used by our macros in process_record_user
@@ -79,12 +78,14 @@ enum custom_keycodes {
 #define HR_L LT(_ACT, BR_L)
 
 #define HR_TAB  LT(_MIS, KC_TAB)
+/* #define HR_TAB  MO(_MIS) */
 #define HR_E  LT(_NAV, BR_E)
-#define HR_BSPC LT(_ACT, KC_BSPC)
+#define HR_BSPC LT(_MOU, KC_BSPC)
 
 #define HR_ENT LT(_SYM, KC_ENT)
 #define HR_SPC LT(_NUM, KC_SPC)
 #define HR_ESC LT(_FUN, KC_ESC)
+/* #define HR_ESC MO(_FUN) */ 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base */
@@ -119,16 +120,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 			                  XXXXXXX, XXXXXXX, XXXXXXX, KC_MSTP, KC_MPLY, KC_MUTE
 	),
 	[_NAV] = LAYOUT_split_3x5_3(
-			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_HOME, KC_END,  KC_AGIN,
+			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_PGUP, KC_HOME, KC_END,  KC_AGIN,
 			HR_PINL, HR_INDL, HR_MIDL, HR_INDL, XXXXXXX, KC_INS,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
-			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_CAPS, XXXXXXX, KC_COPY, KC_CUT,  KC_UNDO,
+			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_CAPS, KC_PGDN, KC_COPY, KC_CUT,  KC_UNDO,
 			                  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_PSCR, XXXXXXX
 	),
 	[_MOU] = LAYOUT_split_3x5_3(
 			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_DOWN, KC_RGHT, KC_HOME, KC_END,  KC_AGIN,
-			HR_PINL, HR_INDL, HR_MIDL, HR_INDL, XXXXXXX, KC_INS,  KC_PGDN, KC_PGUP, KC_PSTE, KC_CAPS,
+			HR_PINL, HR_INDL, HR_MIDL, HR_INDL, XXXXXXX, KC_INS,  KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R,
 			XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_UP,   KC_LEFT, KC_COPY, KC_CUT,  KC_UNDO,
-			                  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+			                  XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN1, KC_BTN3, KC_BTN2
 	),
 	[_ACT] = LAYOUT_split_3x5_3(
 			XXXXXXX, BR_CCED, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, BR_UACT, BR_ATIL, BR_OTIL,
@@ -138,15 +139,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	),
 	[_MIS] = LAYOUT_split_3x5_3(
 			BR_Q,    BR_W,    BR_F,    BR_P,    BR_B,    BR_J,    BR_L,   BR_U,    BR_Y,    BR_QUOT,
-			KC_ENT,  KC_SPC,  KC_LEFT, KC_RGHT, BR_G,    BR_M,    HR_N,   HR_E,    HR_I,    HR_O,
+			KC_ENT,  KC_BTN1, KC_BTN3, KC_BTN2, BR_G,    BR_M,    HR_N,   HR_E,    HR_I,    HR_O,
 			BR_Z,    BR_X,    BR_C,    XXXXXXX,    BR_V,    BR_K,    HR_H,   BR_COMM, BR_DOT,  BR_SLSH,
-			                  XXXXXXX,  KC_SPC,  HR_TAB,  HR_ENT,  HR_SPC, HR_ESC
-	),
-	[_QWT] = LAYOUT_split_3x5_3(
-			BR_Q,    BR_W,    BR_E,    BR_R,    BR_T,    BR_Y,    BR_U,   BR_I,    BR_O,    BR_P,
-			BR_A,    BR_S,    BR_D,    BR_F,    BR_G,    BR_H,    BR_J,   BR_K,    BR_L,    BR_SCLN,
-			BR_Z,    BR_X,    BR_C,    BR_V,    BR_B,    BR_N,    BR_M,   BR_COMM, BR_DOT,  BR_SLSH,
-			                  XXXXXXX,  HR_BSPC,  HR_TAB,  HR_ENT,  HR_SPC, HR_ESC
+			                  XXXXXXX, KC_SPC,  HR_TAB,  HR_ENT,  HR_SPC, HR_ESC
 	),
 };
 
@@ -251,17 +246,13 @@ add_circumflex(uint16_t keycode)
 uint8_t tmp_mods;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (!process_caps_word(keycode, record)) { return false; }
+  if (!process_caps_word(keycode, record))
+	  return false;
 
     process_repeat_key(keycode, record);
     mod_state = get_mods();
     oneshot_mod_state = get_oneshot_mods();
 	switch(keycode) {
-	case CB_QWRT:
-		if (record->event.pressed) {
-			layer_invert(_QWT);
-		}
-		break;
 	case ND_TILD: 
 		if (record->event.pressed) {
 			SEND_STRING("~ ");
@@ -367,15 +358,22 @@ bool caps_word_press_user(uint16_t keycode) {
 
 enum combo_events {
   CAPS_COMBO,
+  /* TAB_COMBO, */
+  /* ESC_COMBO, */
   // Other combos...
   COMBO_LENGTH
 };
 
+
 uint16_t COMBO_LEN = COMBO_LENGTH;
 const uint16_t PROGMEM caps_combo[] = {HR_H, HR_N, COMBO_END};
+/* const uint16_t PROGMEM tab_combo[] = {HR_I, HR_A, COMBO_END}; */
+/* const uint16_t PROGMEM esc_combo[] = {HR_N, HR_I, COMBO_END}; */
 
 combo_t key_combos[] = {
   [CAPS_COMBO] = COMBO_ACTION(caps_combo),
+  /* [TAB_COMBO] = COMBO(tab_combo, KC_TAB), */
+  /* [ESC_COMBO] = COMBO(esc_combo, KC_ESC), */
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
