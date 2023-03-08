@@ -1,0 +1,4 @@
+SPLIT_KEYBOARD = yes
+SERIAL_DRIVER = usart
+
+LAYOUTS = split_3x5_3
